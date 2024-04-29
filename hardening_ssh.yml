@@ -1,0 +1,10 @@
+# hardening_ssh.yml
+
+---
+- name: Hardening SSH
+  hosts: all  # Specify the target hosts or group of hosts
+  become: yes  # Run tasks with root privileges
+  vars_files:
+    - vars/main.yml  # Include variable files if needed
+  roles:
+    - hardening_ssh  # Specify the name of your Jenkins role
