@@ -1,0 +1,46 @@
+---
+- name: Set iptables rules for SSH connection rate limiting
+  ansible.builtin.block:
+    - ansible.builtin.iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 22
+        connection_type: state
+        state: NEW
+        recent: set
+    - ansible.builtin.iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 22
+        connection_type: state
+        state: NEW
+        recent: update
+        seconds: 10
+        hitcount: 10
+        jump: DROP
+    - ansible.builtin.iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 22
+        connection_type: state
+        state: NEW
+        recent: set
+    - ansible.builtin.iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 22
+        connection_type: state
+        state: NEW
+        recent: update
+        seconds: 10
+        hitcount: 10
+        jump: DROP
+
+- name: Install and save iptables rules persistently
+  ansible.builtin.apt:
+    name:
+      - netfilter-persistent
+      - iptables-persistent
+    state: present
+  notify:
+    - save iptables rules

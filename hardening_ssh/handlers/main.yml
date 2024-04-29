@@ -1,0 +1,8 @@
+---
+- name: save iptables rules
+  ansible.builtin.command: service netfilter-persistent save
+
+- name: restart ssh
+  ansible.builtin.service:
+    name: ssh
+    state: restarted

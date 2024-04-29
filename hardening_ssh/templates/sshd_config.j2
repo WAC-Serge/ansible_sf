@@ -1,0 +1,72 @@
+# Use this template to generate a hardened sshd_config file
+# Note: Adjust settings according to your organization's policy and compatibility needs.
+
+# What is the server listening on? Use specific IPs if necessary, 0.0.0.0 means all IPv4 addresses on the machine.
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+# Disable root login via SSH
+PermitRootLogin no
+
+# Specify which accounts can use SSH, if necessary
+# AllowUsers your-username
+
+# Use only the more secure SSH protocol 2
+Protocol 2
+
+# Logging options
+SyslogFacility AUTH
+LogLevel INFO
+
+# Authentication settings
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes
+
+# Specify maximum authentication tries
+MaxAuthTries 3
+
+# Use only secure Key Exchange, Cipher, and MAC algorithms
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com
+
+# Specify the host keys to use
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
+# SSHD will disconnect if no activity for 300 seconds
+ClientAliveInterval 300
+ClientAliveCountMax 0
+
+# Limit users' ability to launch TCP/IP forwardings, if not needed
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+
+# Ensure SSHD uses privilege separation
+UsePrivilegeSeparation sandbox
+
+# Deny environment options sent by the client except for LANG and LC_*
+AcceptEnv LANG LC_*
+
+# Prevent the use of insecure home directory and key file permissions
+StrictModes yes
+
+# Disable unused authentication mechanisms
+KerberosAuthentication no
+GSSAPIAuthentication no
+
+# Disable sftp subsystem if not required
+#Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Additional hardening options
+DebianBanner no
+PrintMotd no
+Compression delayed
+
+# Rate limit incoming connections to help prevent brute force attacks
+MaxStartups 10:30:60
+# Use the following line instead to allow only one connection per source IP, this can be restrictive
+#PerSourceMaxStartups 1
+

@@ -1,0 +1,10 @@
+---
+- name: Enable RSA and ED25519 HostKey directives in sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#HostKey /etc/ssh/ssh_host_(rsa|ed25519)_key'
+    line: 'HostKey /etc/ssh/ssh_host_{{ item }}_key'
+    state: present
+  loop:
+    - rsa
+    - ed25519

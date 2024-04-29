@@ -1,0 +1,18 @@
+---
+- name: Regenerate SSH host keys
+  import_tasks: regenerate_keys.yml
+
+- name: Remove small Diffie-Hellman moduli
+  import_tasks: remove_dh_moduli.yml
+
+- name: Update SSHD configuration to enable RSA and ED25519 keys
+  import_tasks: update_sshd_config.yml
+
+- name: Apply hardening configuration for SSH
+  import_tasks: configure_hardening.yml
+
+- name: Implement connection rate throttling
+  import_tasks: rate_limiting.yml
+
+- name: Deploy hardened SSHD configuration
+  import_tasks: sshd_config.yml
